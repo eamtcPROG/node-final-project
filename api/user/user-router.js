@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const  User  = require('./user-model');
-const {validateUserBody} = require('../middlewares/middlewares');
+const {validateUserBody,error} = require('../middlewares/middlewares');
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
   });
 });
 
-router.post('/',validateUserBody,async  (req, res,next) => {
+router.post('/',validateUserBody,error,async  (req, res,next) => {
     try {
     const { username, password,email } = req.body;
     if (!email) {
@@ -30,14 +30,11 @@ router.post('/',validateUserBody,async  (req, res,next) => {
           res.status(201).json(newUser);
 
     }catch(error) {
-          console.log(error);
-          res.status(500).json({
-            message: 'Error adding the user',
-          });
+          next(error);
         };
   });
 
-  router.put('/:id',async (req, res) => {
+  router.put('/:id',error,async (req, res,next) => {
     const { username, password,email } = req.body;
     const changedUser ={
         username,
@@ -48,18 +45,18 @@ router.post('/',validateUserBody,async  (req, res,next) => {
       .then((updatedUser) => {
         res.status(200).json({ updatedUser });
       })
-      .catch((err) => {
-        res.status(500).json({ message: err });
+      .catch((error) => {
+        next(error)
       });
   });
 
-  router.delete('/:id',(req, res) => {
+  router.delete('/:id',error,(req, res,next) => {
     User.remove(req.params.id)
       .then((deleteduser) => {
         res.status(200).json({ deleteduser });
       })
-      .catch((err) => {
-        res.status(500).json({ message: err });
+      .catch((error) => {
+        next(error);
       });
   });
 

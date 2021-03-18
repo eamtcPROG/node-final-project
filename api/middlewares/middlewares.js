@@ -7,5 +7,13 @@ const validateUserBody = (req, res, next) => {
   
     next();
   };
+
+  const error = (err, req, res, next) => {
+    console.error(err);
   
-  module.exports = { validateUserBody };
+    res.status(500).json({
+      message: 'Something went wrong',
+    });
+  };
+  
+  module.exports = { validateUserBody ,error};
