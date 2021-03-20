@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+
 const validateUserBody = (req, res, next) => {
     const { username, password } = req.body;
   
@@ -15,5 +17,19 @@ const validateUserBody = (req, res, next) => {
       message: 'Something went wrong',
     });
   };
+
+  const restrict = (req, res, next) => {
+    const { token } = req.cookies;
   
-  module.exports = { validateUserBody ,error};
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        return res.status(401).json({ message: 'Invalid credentials' });
+      }
+  
+      req.decoded = decoded;
+      next();
+    });
+  };
+  
+  
+  module.exports = { validateUserBody ,error,restrict};

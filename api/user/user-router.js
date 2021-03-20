@@ -15,6 +15,17 @@ router.get('/', (req, res) => {
   });
 });
 
+router.get('/:id', (req, res) => {
+  User.findById(req.params.id).then((user) =>{
+    res.status(200).json(user);
+  }).catch((error) => {
+    console.log(error);
+    res.status(500).json({
+      message: 'Error retrieving the users',
+    });
+  });
+});
+
 router.post('/',validateUserBody,error,async  (req, res,next) => {
     try {
     const { username, password,email } = req.body;

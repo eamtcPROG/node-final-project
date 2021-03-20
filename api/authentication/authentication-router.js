@@ -20,7 +20,7 @@ router.post('/login',validateUserBody,error, async (req, res,next) => {
   
       const token = jwt.sign(
         {
-          email: user.email,
+          username: user.username,
           id: user._id,
         },
         process.env.JWT_SECRET,
