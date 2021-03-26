@@ -1,4 +1,6 @@
-require('dotenv').config();
+if (process.env.NODE_ENV !== "production") {
+    require("dotenv").config();
+  }
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
@@ -14,7 +16,7 @@ mongoose.connect(
 
 
 const server = express();
-const whitelist = ['http://localhost:3000'];
+const whitelist = ['http://localhost:3000','https://notes-app-exercise.vercel.app'];
 const corsOptions = {
   origin: (origin, callback) => {
     if (whitelist.indexOf(origin) !== -1) {
