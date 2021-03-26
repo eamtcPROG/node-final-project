@@ -1,32 +1,27 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const  User  = require('./user-model');
-const {validateUserBody,error} = require('../middlewares/middlewares');
+const {validateUserBody} = require('../middlewares/middlewares');
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', (req, res,next) => {
   User.find(req.query).then((users) =>{
     res.status(200).json(users);
   }).catch((error) => {
-    console.log(error);
-    res.status(500).json({
-      message: 'Error retrieving the users',
-    });
+    next(error);
+    
   });
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', (req, res,next) => {
   User.findById(req.params.id).then((user) =>{
     res.status(200).json(user);
   }).catch((error) => {
-    console.log(error);
-    res.status(500).json({
-      message: 'Error retrieving the users',
-    });
+    next(error);
   });
 });
 
-router.post('/',validateUserBody,error,async  (req, res,next) => {
+router.post('/',validateUserBody,async  (req, res,next) => {
     try {
     const { username, password,email } = req.body;
     if (!email) {
@@ -45,7 +40,7 @@ router.post('/',validateUserBody,error,async  (req, res,next) => {
         };
   });
 
-  router.put('/:id',error,async (req, res,next) => {
+  router.put('/:id',async (req, res,next) => {
     const { username, password,email } = req.body;
     const changedUser ={
         username,
@@ -61,7 +56,7 @@ router.post('/',validateUserBody,error,async  (req, res,next) => {
       });
   });
 
-  router.delete('/:id',error,(req, res,next) => {
+  router.delete('/:id',(req, res,next) => {
     User.remove(req.params.id)
       .then((deleteduser) => {
         res.status(200).json({ deleteduser });

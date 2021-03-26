@@ -10,14 +10,6 @@ const validateUserBody = (req, res, next) => {
     next();
   };
 
-  const error = (err, req, res, next) => {
-    console.error(err);
-  
-    res.status(500).json({
-      message: 'Something went wrong',
-    });
-  };
-
   const restrict = (req, res, next) => {
     const { token } = req.cookies;
   
@@ -32,4 +24,4 @@ const validateUserBody = (req, res, next) => {
   };
   
   
-  module.exports = { validateUserBody ,error,restrict};
+  module.exports = { validateUserBody ,restrict};

@@ -1,10 +1,10 @@
 const express = require('express');
 const  User  = require('../user/user-model');
 const  Note  = require('./note-model');
-const {error,restrict} = require('../middlewares/middlewares');
+const {restrict} = require('../middlewares/middlewares');
 const router = express.Router();
 
-router.get('/',restrict,error,async (req, res,next) => {
+router.get('/',restrict,async (req, res,next) => {
     
     /* const foundUser = await User.findById( req.decoded.id ).catch((err) => {
       res.status(500).json({ message: err });
@@ -19,7 +19,7 @@ router.get('/',restrict,error,async (req, res,next) => {
     res.json({ /* foundUser, */ notes });
   });
 
-  router.get('/:id',restrict,error,async (req, res,next) => {
+  router.get('/:id',restrict,async (req, res,next) => {
     
     try {
       const foundNote = await Note.findById(req.params.id,);
@@ -34,7 +34,7 @@ router.get('/',restrict,error,async (req, res,next) => {
     }
   });
 
-  router.post('/',restrict,error,async  (req, res,next) => {
+  router.post('/',restrict,async  (req, res,next) => {
     const { title, text } = req.body;
     const userId = req.decoded.id;
 
@@ -47,7 +47,7 @@ router.get('/',restrict,error,async (req, res,next) => {
     });
   });
 
-  router.delete('/:id',error,(req, res,next) => {
+  router.delete('/:id',(req, res,next) => {
     Note.remove(req.params.id)
       .then((deletednote) => {
         res.status(200).json({ deletednote });
@@ -57,7 +57,7 @@ router.get('/',restrict,error,async (req, res,next) => {
       });
   });
 
-  router.put('/:id',error, (req, res,next) => {
+  router.put('/:id', (req, res,next) => {
     const changedNote = req.body;
     Note.update(req.params.id, changedNote)
       .then((updatedNote) => {

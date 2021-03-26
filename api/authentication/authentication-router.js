@@ -2,11 +2,11 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const  User  = require('../user/user-model');
-const {validateUserBody,error} = require('../middlewares/middlewares');
+const {validateUserBody,restrict} = require('../middlewares/middlewares');
 
 const router = express.Router();
 
-router.post('/login',validateUserBody,error, async (req, res,next) => {
+router.post('/login',validateUserBody, async (req, res,next) => {
     try {
       const { username, password } = req.body;
       const user = await User.findByUsername(username);
@@ -41,13 +41,17 @@ router.post('/login',validateUserBody,error, async (req, res,next) => {
     }
   });
 
-  router.get('/logout',error, async (req, res,next) => {
+  router.get('/logout', async (req, res,next) => {
     try {
       res.clearCookie('token');
       res.status(200).json({ message: 'Logout' });
     } catch (error) {
         next(error);
     }
+  });
+
+  router.get('/check-auth', restrict, (req, res) => {
+    res.status(200).json({ message: 'ok' });
   });
 
 module.exports = router;

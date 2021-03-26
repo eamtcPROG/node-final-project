@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 
 
 
@@ -12,11 +14,26 @@ mongoose.connect(
 
 
 const server = express();
-server.use(express.json());
+const whitelist = ['http://localhost:3000'];
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+};
+
+server.use(cors(corsOptions));
+server.use(bodyParser.json());
+//server.use(express.json());
 server.use(cookieParser());
 const usersRouter = require('./user/user-router');
 const noteRouter = require('./note/note-router');
 const authRouter = require('./authentication/authentication-router');
+
 
 server.use('/api/user', usersRouter);
 server.use('/api/note', noteRouter);
@@ -25,5 +42,13 @@ server.use('/api/authentication', authRouter);
 server.get('/', (req, res) => {
     res.send('<h1>Notes project api</h1>')
 });
+
+server.use((err, req, res, next) => {
+    console.error(err);
+  
+    res.status(500).json({
+      message: 'Something went wrong',
+    });
+  });
 
 module.exports = server;
