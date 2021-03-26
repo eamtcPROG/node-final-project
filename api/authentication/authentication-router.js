@@ -29,11 +29,12 @@ router.post('/login',validateUserBody, async (req, res,next) => {
         }
       );
     
-      res.cookie('token', token);
+      //res.cookie('token', token);
     
   
       res.status(200).json({
         message: `Welcome ${user.username}!`,
+        token: token
       });
     } catch (error) {
        next(error);
