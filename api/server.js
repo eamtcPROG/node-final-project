@@ -16,7 +16,7 @@ mongoose.connect(
 
 const server = express();
 const whitelist = ['http://localhost:3000','https://notes-app-exercise.vercel.app'];
-const corsOptions = {
+/* const corsOptions = {
   origin: (origin, callback) => {
     if (whitelist.indexOf(origin) !== -1) {
       callback(null, true);
@@ -25,11 +25,11 @@ const corsOptions = {
     }
   },
   credentials: true,
-};
+}; */
 
-server.use(cors(corsOptions));
+
 server.use(cors());
-server.use(bodyParser.json());
+server.use(bodyParser.json())
 //server.use(express.json());
 server.use(cookieParser());
 const usersRouter = require('./user/user-router');
