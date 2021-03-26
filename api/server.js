@@ -28,7 +28,8 @@ const server = express();
   credentials: true,
 }; */
 
-server.use(cors(corsOptions));
+//server.use(cors(corsOptions));
+server.use(cors());
 server.use(bodyParser.json());
 //server.use(express.json());
 server.use(cookieParser());
