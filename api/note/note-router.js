@@ -6,9 +6,9 @@ const router = express.Router();
 
 router.get('/',restrict,async (req, res,next) => {
     
-    /* const foundUser = await User.findById( req.decoded.id ).catch((err) => {
+     const foundUser = await User.findById( req.decoded.id ).catch((err) => {
       res.status(500).json({ message: err });
-    }); */
+    }); 
 
     const notes = await Note.find(
       { user_id: req.decoded.id }
@@ -16,7 +16,7 @@ router.get('/',restrict,async (req, res,next) => {
      next(error)
     });
     
-    res.json({ /* foundUser, */ notes });
+    res.json({  foundUser,  notes });
   });
 
   router.get('/:id',restrict,async (req, res,next) => {
